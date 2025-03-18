@@ -13,7 +13,9 @@ Every folder contains one (or more) dataset and a notebook, if part of group wor
 - Python
 - Numpy
 - Pandas
-- more libraries soon
+- Matplotlib
+- Scikit-learn
+- and other Python libraries for data analytics
 
 ### Feedback & Contributions
 
