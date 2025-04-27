@@ -8,15 +8,22 @@ The main goal is, after years of a total theorical study, to improve practical s
 Every exercise is a small exploratory analysis on some dataset, conceived independently or assigned during university courses.
 Every folder contains one (or more) dataset and a notebook, if part of group work, entirely redone by me.
 
-### Technologies Used
+- ex 1: exploring and cleaning a dataset of computer science research papers
+- ex 2: data cleaning in a dataset about the Titanic
+- ex 3: exploring and visualizing textual data from an IMDb dataset using TF-IDF and SBERT
+- ex 4: sentiment analysis of Airbnb reviews based on reviewer gender
 
-- Python
+### Python Libraries Used
+
 - Numpy
 - Pandas
 - Matplotlib
-- Scikit-learn
 - Seaborn
-- and other Python libraries for data analytics
+- Scikit-learn
+- Scipy
+- nltk
+- transformers
+- PyTorch
 
 ### Feedback & Contributions
 
