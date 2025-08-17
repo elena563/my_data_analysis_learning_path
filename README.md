@@ -8,7 +8,7 @@ The main goal is, after years of a total theorical study, to improve practical s
 Every exercise can be:
 - a little task conceived and created independently
 - some work assigned during university or online courses (done by me)
-- material (partly or entirely) copied from someone else, only for educational purposes (in this case I'll cite the source)
+- material (partly or entirely) copied from someone else, only for educational purposes (in this case I'll cite the source)  
 Every folder can contain some datasets, notebooks and scripts, here is a small presentation of each folder:
 
 - ex 1: exploring and cleaning a dataset of computer science research papers
