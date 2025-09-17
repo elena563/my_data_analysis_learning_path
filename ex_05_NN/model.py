@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List
-from .utils import normalize, softmax
+from tqdm import tqdm
+from .utils import normalize, softmax, derivative
 
 class NN():
     def __init__(self, X: np.ndarray, y: np.ndarray, X_test: np.ndarray, y_test: np.ndarray, activation: str, num_labels: int, architecture: List[int]):
@@ -53,8 +54,71 @@ class NN():
         return cost, self.layers
 
 
-# backpropagation
-# training
-#cost function
-# predict
-# metrics
+    # backpropagation
+
+    def backpropagate(self):
+        derivatives = {}
+        dZ = self.output - self.y
+        assert dZ.shape == (self.num_labels, self.m)
+        dW = np.dot(dZ, self.layers["a" + str(self.L-2)].T) / self.m
+        db = np.sum(dZ, axis=1, keepdims=True) / self.m
+        dAPrev = np.dot(self.parameters["w" + str(self.L-1)].T, dZ)
+        derivatives["dW" + str(self.L-1)] = dW
+        derivatives["db" + str(self.L-1)] = db
+        
+        for l in range(self.L-2, 0, -1):
+            dZ = dAPrev * derivative(self.activation, self.layers["z" + str(l)])
+            dW = 1. / self.m * np.dot(dZ, self.layers["a" + str(l-1)].T)
+            db = 1. / self.m * np.sum(dZ, axis=1, keepdims=True)
+            if l > 1:
+                dAPrev = np.dot(self.parameters["w" + str(l)].T, (dZ))
+            derivatives["dW" + str(l)] = dW
+            derivatives["db" + str(l)] = db
+        self.derivatives = derivatives
+        
+        return self.derivatives
+    
+
+    # training
+    def fit(self, lr=0.01, epochs=1000):
+        self.costs = [] 
+        self.initialize_parameters()
+        self.accuracies = {"train": [], "test": []}
+        for epoch in tqdm(range(epochs), colour="BLUE"):
+            cost, cache = self.forward()
+            self.costs.append(cost)
+            derivatives = self.backpropagate()            
+            for layer in range(1, self.L):
+                self.parameters["w"+str(layer)] = self.parameters["w"+str(layer)] - lr * derivatives["dW" + str(layer)]
+                self.parameters["b"+str(layer)] = self.parameters["b"+str(layer)] - lr * derivatives["db" + str(layer)]            
+            train_accuracy = self.accuracy(self.X, self.y)
+            test_accuracy = self.accuracy(self.X_test, self.y_test)
+            if epoch % 10 == 0:
+                print(f"Epoch: {epoch:3d} | Cost: {cost:.3f} | Accuracy: {train_accuracy:.3f}")
+            self.accuracies["train"].append(train_accuracy)
+            self.accuracies["test"].append(test_accuracy)
+        print("Training terminated")
+
+
+    # predict
+    def predict(self, x):
+            params = self.parameters
+            n_layers = self.L - 1
+            values = [x]
+            for l in range(1, n_layers):
+                z = np.dot(params["w" + str(l)], values[l-1]) + params["b" + str(l)]
+                a = eval(self.activation)(z)
+                values.append(a)
+            z = np.dot(params["w"+str(n_layers)], values[n_layers-1]) + params["b"+str(n_layers)]
+            a = softmax(z)
+            if x.shape[1]>1:
+                ans = np.argmax(a, axis=0)
+            else:
+                ans = np.argmax(a)
+            return ans
+        
+        
+    def accuracy(self, X, y):
+        P = self.predict(X)
+        return sum(np.equal(P, np.argmax(y, axis=0))) / y.shape[1]*100
+    
