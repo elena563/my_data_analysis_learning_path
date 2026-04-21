@@ -18,6 +18,7 @@ Every folder can contain some datasets, notebooks and scripts, here is a small p
 - ex 4: sentiment analysis of Airbnb reviews based on reviewer gender
 - ex 5: building a neural network from scratch (source: towardsdatascience.com)
 - ex 6: sentiment analysis of tweets about earth day and other topics 
+- ex 7: analyzing user flow in an e-commerce website using simple Markov chains
 
 ### Python Libraries Used
 
